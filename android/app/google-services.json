@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "963589213926",
+    "firebase_url": "https://hotel-practice-f6103.firebaseio.com",
+    "project_id": "hotel-practice-f6103",
+    "storage_bucket": "hotel-practice-f6103.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:963589213926:android:b41265be12e5e6431e7527",
+        "android_client_info": {
+          "package_name": "com.example.hotels"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "963589213926-547uhramah7hcgdcidsussjeui3gkr2b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hotels",
+            "certificate_hash": "ef3100080d16ef8e0d4c98b0c36b7f1ab8375b12"
+          }
+        },
+        {
+          "client_id": "963589213926-2pcc2lu6c70pnpnm7sa511h2rv5qbip0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhgP65gnaGh54cgNw9iy4foS-DZ8qHxR4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "963589213926-2pcc2lu6c70pnpnm7sa511h2rv5qbip0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
