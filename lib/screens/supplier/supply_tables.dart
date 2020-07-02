@@ -99,7 +99,7 @@ class _SupplyTablesState extends State<SupplyTables> {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => SelectItems(tableNo: table.tableNo),
+            builder: (context) => SelectItems(table: table),
           ),
         );
       },

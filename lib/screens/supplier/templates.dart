@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hotels/models/food_item.dart';
 
 class Templates {
-  static List<FoodItem> foodItems = [];
   static Widget foodCard(FoodItem foodItem, BuildContext context) {
     return Stack(
       children: <Widget>[

@@ -2,14 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hotels/models/food_item.dart';
 import 'package:hotels/models/order.dart';
+import 'package:hotels/models/orders_list.dart';
+import 'package:hotels/screens/supplier/select_items.dart';
 import 'package:hotels/screens/supplier/templates.dart';
 import 'package:hotels/services/database.dart';
+import 'package:provider/provider.dart';
 
 class OrderDialog extends StatefulWidget {
   final FoodItem foodItem;
-  final String tableNo;
 
-  const OrderDialog({Key key, this.foodItem, this.tableNo}) : super(key: key);
+  const OrderDialog({
+    Key key,
+    this.foodItem,
+  }) : super(key: key);
   @override
   _OrderDialogState createState() => _OrderDialogState();
 }
@@ -21,6 +26,9 @@ class _OrderDialogState extends State<OrderDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final OrderListNotifier orderListNotifier =
+        Provider.of<OrderListNotifier>(context, listen: false);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -94,10 +102,11 @@ class _OrderDialogState extends State<OrderDialog> {
             shape: StadiumBorder(),
             child: Text("Done"),
             onPressed: () {
-              Database.addOrder(widget.tableNo,
-                  Order(widget.foodItem, quantity, msgController.text));
-              Navigator.of(context).pop();
-//              print("pressed");
+              if (quantity > 0) {
+                orderListNotifier.addOrder(
+                    Order(widget.foodItem, quantity, msgController.text));
+                Navigator.of(context).pop();
+              }
             },
           ),
         )
