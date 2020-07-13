@@ -46,9 +46,11 @@ class _AddFoodItemState extends State<AddFoodItem> {
         StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
         print("uploaded");
         String imageUrl = await storageRef.getDownloadURL();
-        setState(() {
-          this.imageUrl = imageUrl;
-        });
+        setState(
+          () {
+            this.imageUrl = imageUrl;
+          },
+        );
       }
       if (widget.foodItem != null && imageUrl != null) {
         Database.deleteImage(widget.foodItem.image);
@@ -164,20 +166,21 @@ class _AddFoodItemState extends State<AddFoodItem> {
                     ),
                   ),
                   Positioned(
-                      top: 110,
-                      left: MediaQuery.of(context).size.width * .54,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.purple,
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.camera_alt,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            _showBottomSheet();
-                          },
+                    top: 110,
+                    left: MediaQuery.of(context).size.width * .54,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.purple,
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.camera_alt,
+                          color: Colors.white,
                         ),
-                      ))
+                        onPressed: () {
+                          _showBottomSheet();
+                        },
+                      ),
+                    ),
+                  )
                 ],
               ),
               SizedBox(
@@ -217,17 +220,21 @@ class _AddFoodItemState extends State<AddFoodItem> {
                               BorderSide(color: Colors.deepPurple, width: 2.0),
                         ),
                       ),
-                      items: categories.map((value) {
-                        return DropdownMenuItem(
-                          value: value == 'end' ? null : value,
-                          child: value == 'end' ? addNew() : Text(value),
-                        );
-                      }).toList(),
+                      items: categories.map(
+                        (value) {
+                          return DropdownMenuItem(
+                            value: value == 'end' ? null : value,
+                            child: value == 'end' ? addNew() : Text(value),
+                          );
+                        },
+                      ).toList(),
                       onChanged: (value) {
-                        setState(() {
-                          selectedCategory = value;
-                          newSelectedCategory = value;
-                        });
+                        setState(
+                          () {
+                            selectedCategory = value;
+                            newSelectedCategory = value;
+                          },
+                        );
                       },
                       value: selectedCategory,
                     ),
@@ -261,9 +268,11 @@ class _AddFoodItemState extends State<AddFoodItem> {
                             : Text('Add'),
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
-                            Scaffold.of(context).showSnackBar(SnackBar(
-                              content: Text("Adding Item...."),
-                            ));
+                            Scaffold.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Adding Item...."),
+                              ),
+                            );
                             uploadImage(context);
                           }
                         },
@@ -327,16 +336,20 @@ class _AddFoodItemState extends State<AddFoodItem> {
   Future _getImage() async {
     var image = await ImagePicker.pickImage(
         source: ImageSource.gallery, maxHeight: 200, maxWidth: 200);
-    setState(() {
-      this.image = image;
-    });
+    setState(
+      () {
+        this.image = image;
+      },
+    );
   }
 
   Future _getImageCam() async {
     var image = await ImagePicker.pickImage(
         source: ImageSource.camera, maxHeight: 200, maxWidth: 200);
-    setState(() {
-      this.image = image;
-    });
+    setState(
+      () {
+        this.image = image;
+      },
+    );
   }
 }

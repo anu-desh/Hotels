@@ -123,20 +123,23 @@ class Database {
         .remove();
   }
 
-  static Future<void> search() {
-    FirebaseDatabase.instance
+  static Future<Widget> search(String phone) {
+    return FirebaseDatabase.instance
         .reference()
         .child("AllHotels")
-        .child("+919535744937") //manager number
-        .child("Staff")
-        .child("Chefs") //role
-        .child("2589631470") //chef number
+        .child(phone) //manager number
+//        .child("Staff")
+//        .child("Chefs") //role
+//        .child("2589631470") //chef number
         .once()
         .then((DataSnapshot data) {
       if (data.value == null)
-        print("not added,ask you manager to add");
-      else
-        print("welcome chef");
+        return Container();
+      else {
+        return Container(
+          child: Text("hello"),
+        );
+      }
     });
   }
 
@@ -164,5 +167,16 @@ class Database {
       "Quantity": order.quantity,
       "Message": order.message,
     });
+  }
+
+  static Future<void> freeTable(String tableNo) {
+    return FirebaseDatabase.instance
+        .reference()
+        .child("AllHotels")
+        .child("+919535744937")
+        .child("HotelInfo")
+        .child("Tables")
+        .child(tableNo)
+        .update({"status": "Available"});
   }
 }

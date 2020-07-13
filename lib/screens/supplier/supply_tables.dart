@@ -5,6 +5,7 @@ import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:hotels/models/table.dart';
 import 'package:hotels/screens/supplier/select_items.dart';
+import 'package:hotels/services/database.dart';
 
 class SupplyTables extends StatefulWidget {
   @override

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hotels/models/orders_list.dart';
 import 'package:hotels/screens/supplier/supplier_home.dart';
@@ -28,7 +29,55 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.deepPurple,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: SupplierHome(),
+      home: Start(),
+    );
+  }
+}
+
+class Start extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            RaisedButton(
+              color: Colors.deepPurple,
+              child: Text("Manager"),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => ManagerHome()),
+                );
+              },
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            RaisedButton(
+              color: Colors.deepPurple,
+              child: Text("Chef"),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => ChefHome()),
+                );
+              },
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            RaisedButton(
+              color: Colors.deepPurple,
+              child: Text("Supplier"),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => SupplierHome()),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

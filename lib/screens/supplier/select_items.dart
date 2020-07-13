@@ -27,6 +27,11 @@ class _SelectItemsState extends State<SelectItems> {
       .child("+919535744937")
       .child("HotelInfo")
       .child("Items");
+  List<FoodItem> foodItems = [];
+  TextEditingController searchQuery = new TextEditingController();
+  bool isSearching = false;
+  String searchText = "";
+  List<FoodItem> searchList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -46,15 +51,31 @@ class _SelectItemsState extends State<SelectItems> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("${widget.table.tableNo} Items"),
+        title: isSearching
+            ? TextField(
+                controller: searchQuery,
+                autofocus: true,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(borderSide: BorderSide.none),
+                  hintText: "Search here...",
+                  hintStyle: TextStyle(color: Colors.white),
+                ),
+              )
+            : Text("${widget.table.tableNo} Items"),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.filter_list),
             onPressed: () {},
           ),
           IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {},
+            icon: Icon(isSearching ? Icons.clear : Icons.search),
+            onPressed: () {
+              setState(() {
+                if (isSearching == false) searchQuery.clear();
+                isSearching = !isSearching;
+                _buildSearchList();
+              });
+            },
           ),
           IconButton(
             icon: Icon(Icons.more_vert),
@@ -63,10 +84,12 @@ class _SelectItemsState extends State<SelectItems> {
         ],
       ),
       body: ListView(
+        physics: ClampingScrollPhysics(),
         shrinkWrap: true,
         children: <Widget>[
           Consumer<OrderListNotifier>(
             builder: (_, obj, __) {
+              widget.table.orders = obj.orderList;
               return Container(
                 child: Column(
                   children: <Widget>[
@@ -90,6 +113,7 @@ class _SelectItemsState extends State<SelectItems> {
                               ),
                             )
                           : ListView.builder(
+                              physics: ClampingScrollPhysics(),
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
                               itemCount: obj.orderList.length,
@@ -144,9 +168,9 @@ class _SelectItemsState extends State<SelectItems> {
               if (snap.hasData &&
                   !snap.hasError &&
                   snap.data.snapshot.value != null) {
-                List<FoodItem> foodItems = [];
+                foodItems.clear();
 //          print(snap.data.snapshot.value);
-
+//                searchList.clear();
                 Map values = snap.data.snapshot.value;
                 if (values != null) {
                   values.forEach((key, value) {
@@ -158,36 +182,48 @@ class _SelectItemsState extends State<SelectItems> {
                     });
                   });
                 }
-                return Column(
-                  children: <Widget>[
-                    Text(
-                      "Menu Items",
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    GridView.builder(
-                        shrinkWrap: true,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3),
-                        itemCount: foodItems.length + 1,
-                        itemBuilder: (context, index) {
-                          if (foodItems.length == index)
-                            return nextButton();
-                          else
-                            return foodCard(foodItems[index]);
-                        }),
-                  ],
-                );
+                return Container();
               } else
                 return Center(
                   child: CircularProgressIndicator(),
                 );
             },
           ),
+          Column(
+            children: <Widget>[
+              Text(
+                "Menu Items",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              GridView.builder(
+                  physics: ClampingScrollPhysics(),
+                  shrinkWrap: true,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3),
+                  itemCount: searchList.length,
+                  itemBuilder: (context, index) {
+                    return foodCard(searchList[index]);
+                  }),
+            ],
+          )
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(
+          Icons.arrow_forward,
+          color: Colors.white,
+          size: 30,
+        ),
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => BillPage(table: widget.table),
+            ),
+          );
+        },
       ),
     );
   }
@@ -211,23 +247,31 @@ class _SelectItemsState extends State<SelectItems> {
     );
   }
 
-  Widget nextButton() {
-    return Center(
-      child: CircleAvatar(
-        radius: 30,
-        child: IconButton(
-          icon: Icon(
-            Icons.arrow_forward,
-            color: Colors.white,
-            size: 30,
-          ),
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => BillPage(table: widget.table),
-            ));
-          },
-        ),
-      ),
-    );
+  _SelectItemsState() {
+    searchQuery.addListener(() {
+      if (searchQuery.text.isEmpty) {
+        setState(() {
+          searchText = "";
+          _buildSearchList();
+        });
+      } else {
+        setState(() {
+          searchText = searchQuery.text;
+          _buildSearchList();
+        });
+      }
+    });
+  }
+
+  List<FoodItem> _buildSearchList() {
+    searchList.clear();
+    searchList = foodItems
+        .where((element) =>
+                element.name.toLowerCase().contains(searchText.toLowerCase()) ||
+                element.name.toLowerCase().startsWith(searchText.toLowerCase())
+//            element.category.toLowerCase().contains(searchText.toLowerCase()))
+            )
+        .toList();
+    return searchList;
   }
 }
